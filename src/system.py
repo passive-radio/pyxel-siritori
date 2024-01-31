@@ -73,11 +73,17 @@ class SysInputText(System):
             if pyxel.btnp(pyxel.KEY_Z):
                 text += "z"
             
+            if text[-2:] == "si":
+                text = text[:-2] + "shi"
+            if text[-2:] == "ti":
+                text = text[:-2] + "chi"
+            if text[-2:] == "tu":
+                text = text[:-2] + "tsu"
             text_jp: str = alphabet2kana(text)
             if (text_jp != "") and (0 < len(text_jp)):
                 siritori.current_word_jp = text_jp
                 siritori.current_word = text
-                if pyxel.btnp(pyxel.KEY_RETURN):
+                if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_RETURN2):
                     if (siritori.history[-1][-1] == text_jp[0]) and (text_jp not in siritori.history):
                         siritori.history.append(text_jp)
                         siritori.current_word = ""

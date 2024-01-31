@@ -19,12 +19,21 @@ class ScStart(Screen):
         """Draw the screen.
         """
         pyxel.cls(13)
-        pyxel.blt(220, 200, 0, 0, 0, 45, 39, 0)
-        pyxel.blt(300, 210, 0, 48, 15, 29, 18, 0)
-        pyxel.blt(360, 190, 0, 80, 8, 40, 48, 1) # 40 x 48
-        self.world.bdf24.draw_text(265, 265, "しりとり", 0)
+        self.world.bdf24.draw_text(80, 138, "しりとり", 0)
+        pyxel.blt(200, 140, 0, 48, 15, 29, 18, 0)
+        pyxel.blt(240, 130, 0, 0, 0, 45, 39, 0)
+        pyxel.blt(320, 140, 0, 48, 15, 29, 18, 0)
+        pyxel.blt(380, 120, 0, 80, 8, 40, 48, 1) # 40 x 48
         
-        self.world.bdf24.draw_text(145, 360, "[Enter/Return] を押してスタート", 0)
+        
+        self.world.bdf24.draw_text(145, 220, "[Enter/Return] を押してスタート", (pyxel.frame_count * 3 // self.world.FPS) % 16)
+        self.world.bdf24.draw_text(80, 300, "遊び方")
+        
+        pyxel.rect(80, 330, 460, 260, 7)
+        self.world.bdf16.draw_text(100, 340, "しりとりを始めよう。", 0)
+        self.world.bdf16.draw_text(100, 370, "しりとりを始めたらスペースキーを押して履歴が見れる。", 0)
+        self.world.bdf16.draw_text(100, 400, "しりとりをするにはキーボードが必要です。", 0)
+        self.world.bdf16.draw_text(100, 430, "半角入力に切り替えて始めてください。", 0)
         
 class ScPlay(Screen):
     """Play screen class.
@@ -75,13 +84,25 @@ class ScHistory(Screen):
         """Draw the screen.
         """
         pyxel.cls(13)
-        self.world.bdf16.draw_text(20, 20, "[Enter/Return] を押してゲームを再開", 0)
+        self.world.bdf16.draw_text(15, 10, "[Enter/Return] を押してゲームを再開", 0)
         
         for ent, (siritori) in self.world.get_component(CpmSiritori):
             last_word_top = 0
+            x_i = 0
+            y_i = 0
             for i, word in enumerate(siritori.history):
-                self.world.bdf24.draw_text(50, 50 + 60 * i, word, 0)
-                pyxel.blt(50, 80 + 60 * i, 0, 54, 40, 26, 30, 0)
-                last_word_top = 80 + 60 * i
+                if 0 < i and i % 9 == 0:
+                    x_i += 1
+                    y_i = 0
+                    
+                if 2 < x_i and 9 < y_i:
+                    print("too many words")
+                    return 
+                
+                self.world.bdf24.draw_text(30 + 200 * x_i, 45 + 60 * y_i, f"{i+1} {word}", 0)
+                pyxel.blt(64 + 200 * x_i, 75 + 60 * y_i, 0, 54, 40, 26, 30, 0)
+                last_word_top = 75 + 60 * y_i
+                
+                y_i += 1
             
-            pyxel.rect(50, last_word_top + 30, 180, 30, 7)
+            pyxel.rect(30 + 200 * x_i, last_word_top + 30, 100, 30, 7)
