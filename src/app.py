@@ -54,7 +54,9 @@ def construct():
     app.add_scenes(["start", "play", "settings", "history"])
     
     siritori = app.create_entity()
+    cpu = app.create_entity()
     app.add_component_to_entity(siritori, CpmSiritori, current_word="", history=["しりとり", "りんご"])
+    app.add_component_to_entity(cpu, CpmCpu)
 
     app.add_screen_to_scenes(ScStart, "start", 0)
     app.add_screen_to_scenes(ScPlay, "play", 0)
@@ -71,6 +73,7 @@ def construct():
 
     
     app.add_system_to_scenes(SysInputText, "play", 0)
+    app.add_system_to_scenes(SysCpuTurn, "play", 1, filepath="assets/word_list.csv")
     
     app.add_event_to_scene(EvSettingsCloseApp, "settings", lambda: pyxel.btn(pyxel.KEY_ESCAPE), 0)
 
