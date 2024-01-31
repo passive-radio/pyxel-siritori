@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.venv/
+pyxel_examples/
+
+*.html
+*.pyxapp
+jaconv/
+pigframe/
